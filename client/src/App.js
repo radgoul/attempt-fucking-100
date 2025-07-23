@@ -54,6 +54,55 @@ function App() {
     fetchTotalOrders();
   }, []);
 
+  // Custom cursor functionality
+  useEffect(() => {
+    const cursorWrapper = document.querySelector('.target-cursor-wrapper');
+
+    let mouseX = 0;
+    let mouseY = 0;
+    let cursorX = 0;
+    let cursorY = 0;
+
+    const updateCursor = () => {
+      cursorX += (mouseX - cursorX) * 0.1;
+      cursorY += (mouseY - cursorY) * 0.1;
+
+      if (cursorWrapper) {
+        cursorWrapper.style.left = cursorX + 'px';
+        cursorWrapper.style.top = cursorY + 'px';
+      }
+    };
+
+    const handleMouseMove = (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+    };
+
+    const handleMouseEnter = () => {
+      if (cursorWrapper) cursorWrapper.style.opacity = '1';
+    };
+
+    const handleMouseLeave = () => {
+      if (cursorWrapper) cursorWrapper.style.opacity = '0';
+    };
+
+    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseenter', handleMouseEnter);
+    document.addEventListener('mouseleave', handleMouseLeave);
+
+    const animationFrame = () => {
+      updateCursor();
+      requestAnimationFrame(animationFrame);
+    };
+    animationFrame();
+
+    return () => {
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseenter', handleMouseEnter);
+      document.removeEventListener('mouseleave', handleMouseLeave);
+    };
+  }, []);
+
   const fetchTotalOrders = async () => {
     try {
       const response = await axios.get('/api/orders/count');
@@ -194,6 +243,14 @@ function App() {
 
   return (
     <div className="container">
+      {/* Custom Target Cursor */}
+      <div className="target-cursor-wrapper">
+        <div className="target-cursor-dot"></div>
+        <div className="target-cursor-corner corner-tl"></div>
+        <div className="target-cursor-corner corner-tr"></div>
+        <div className="target-cursor-corner corner-br"></div>
+        <div className="target-cursor-corner corner-bl"></div>
+      </div>
 
       
       {/* Logo in top left corner */}
@@ -202,7 +259,7 @@ function App() {
       {/* Success overlay */}
       <div className={`success-overlay ${showSuccessOverlay ? 'show' : ''}`}></div>
       
-      <h1 className="main-title">MAKE AMERICA GOUL AGAIN!!!</h1>
+      <h1 className="main-title shiny-text">MAKE AMERICA GOUL AGAIN!!!</h1>
       
       {/* Wallet Status */}
       <div className="wallet-status">

@@ -2,6 +2,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  cursor: none; /* Hide default cursor */
 }
 
 body {
@@ -44,6 +45,34 @@ code {
   text-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
   font-family: 'Goosebump', 'Arial Black', sans-serif;
   letter-spacing: 2px;
+}
+
+.shiny-text {
+  color: #b5b5b5a4; /* Adjust this color to change intensity/style */
+  background: linear-gradient(
+    120deg,
+    rgba(255, 255, 255, 0) 40%,
+    rgba(255, 255, 255, 0.8) 50%,
+    rgba(255, 255, 255, 0) 60%
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  display: inline-block;
+  animation: shine 5s linear infinite;
+}
+
+@keyframes shine {
+  0% {
+    background-position: 100%;
+  }
+  100% {
+    background-position: -100%;
+  }
+}
+
+.shiny-text.disabled {
+  animation: none;
 }
 
 .wallet-status {
@@ -280,6 +309,79 @@ code {
 
 @keyframes spin {
   to { transform: rotate(360deg); }
+}
+
+/* Custom Target Cursor */
+.target-cursor-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  z-index: 9999;
+  mix-blend-mode: difference;
+  transform: translate(-50%, -50%);
+}
+
+.target-cursor-dot {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 4px;
+  height: 4px;
+  background: #fff;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  will-change: transform;
+}
+
+.target-cursor-corner {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 12px;
+  height: 12px;
+  border: 3px solid #fff;
+  will-change: transform;
+}
+
+.corner-tl {
+  transform: translate(-150%, -150%);
+  border-right: none;
+  border-bottom: none;
+}
+
+.corner-tr {
+  transform: translate(50%, -150%);
+  border-left: none;
+  border-bottom: none;
+}
+
+.corner-br {
+  transform: translate(50%, 50%);
+  border-left: none;
+  border-top: none;
+}
+
+.corner-bl {
+  transform: translate(-150%, 50%);
+  border-right: none;
+  border-top: none;
+}
+
+/* Cursor hover effects */
+button:hover ~ .target-cursor-wrapper .target-cursor-dot,
+input:hover ~ .target-cursor-wrapper .target-cursor-dot,
+select:hover ~ .target-cursor-wrapper .target-cursor-dot {
+  transform: translate(-50%, -50%) scale(1.5);
+  background: #00ff00;
+}
+
+button:hover ~ .target-cursor-wrapper .target-cursor-corner,
+input:hover ~ .target-cursor-wrapper .target-cursor-corner,
+select:hover ~ .target-cursor-wrapper .target-cursor-corner {
+  border-color: #00ff00;
 }
 
 @font-face {
